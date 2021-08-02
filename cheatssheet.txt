@@ -1,8 +1,26 @@
+
+Downloads: https://www.mongodb.com/try/download/community
+
 MongoDB\Server\5 installed @ below location:
-	C:\Program Files\MongoDB\Server\5.0\bin
+	drivename:\Program Files\MongoDB\Server\5.0\bin
 
 Update the PATH in environment variables with above bin location:	
 
+mongoDB - is No SQL Database
+Document oriented, Bson based data is stored.
+Open-source developed in 2007
+
+SQL     =   No SQL 
+Database = Database
+Tables = Collections
+Rows = Documents
+
+mongod is host process for the database.
+mongo is cmd line shell that connects to mongod service.
+
+mongoDB installation uses port - 27017 default port installed
+mongoDB compass - UI for accessing and executing mongo db commands.
+------------------------------------------------------------------------
 open cmd
 
 View all databases:
