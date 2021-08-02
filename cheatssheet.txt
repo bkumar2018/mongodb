@@ -1,0 +1,182 @@
+MongoDB\Server\5 installed @ below location:
+	C:\Program Files\MongoDB\Server\5.0\bin
+
+open cmd
+
+View all databases:
+>show dbs;
+
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+testdb  0.000GB
+
+
+#View current database
+>db 
+test
+
+#Switch to database
+>use dbName
+
+#Delete database
+>db.dropDatabase()
+{"ok":1}
+
+//////////////////
+
+show dbs
+
+use <database>
+
+#To get tables or collections in capital
+> show collections
+
+# Create collection or table
+db.createCollection('comments')
+
+db.<collectionsname>.drop()
+
+#insert rows:
+db.<collections>.insert({
+'name': 'birender',
+'lang':'python',
+'age': 5})
+
+# show all the data from collection or table
+db.comments.find()
+
+#insert many elements at a time.
+db.comments.insertMany([
+{'name': 'narrender',
+'lang':'java',
+'age': 6},
+{'name': 'surrender',
+'lang':'python',
+'age': 2}
+])
+
+Below is output from above commands:
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("61078c01ed955bef43c9137c"),
+                ObjectId("61078c01ed955bef43c9137d")
+        ]
+}
+
+#Show all rows in collection in prettified format
+db.comments.find().pretty()
+
+
+> db.comments.find()
+{ "_id" : ObjectId("61078b29ed955bef43c9137b"), "name" : "birender", "lang" : "python", "age" : 5 }
+{ "_id" : ObjectId("61078c01ed955bef43c9137c"), "name" : "narrender", "lang" : "java", "age" : 6 }
+{ "_id" : ObjectId("61078c01ed955bef43c9137d"), "name" : "surrender", "lang" : "python", "age" : 2 }
+> db.comments.find().pretty()
+{
+        "_id" : ObjectId("61078b29ed955bef43c9137b"),
+        "name" : "birender",
+        "lang" : "python",
+        "age" : 5
+}
+{
+        "_id" : ObjectId("61078c01ed955bef43c9137c"),
+        "name" : "narrender",
+        "lang" : "java",
+        "age" : 6
+}
+{
+        "_id" : ObjectId("61078c01ed955bef43c9137d"),
+        "name" : "surrender",
+        "lang" : "python",
+        "age" : 2
+}
+>
+
+
+#insert new date rows in collection
+db.comments.insert({
+'name': 'birender',
+'lang':'python',
+'age': 5,
+'date': new Date()})
+
+db.comments.find().pretty()
+db.comments.find().pretty().limit(2) # show only first 2 records
+
+db.comments.find({lang:'python'})
+
+
+#serach in mongo db, for all records with 'python' lang
+> db.comments.find({lang:'python'})
+{ "_id" : ObjectId("61078b29ed955bef43c9137b"), "name" : "birender", "lang" : "python", "age" : 5 }
+{ "_id" : ObjectId("61078c01ed955bef43c9137d"), "name" : "surrender", "lang" : "python", "age" : 2 }
+{ "_id" : ObjectId("61078cd4ed955bef43c9137e"), "name" : "birender", "lang" : "python", "age" : 5, "date" : ISODate("2021-08-02T06:12:36.120Z") }
+
+
+#Show count of total records
+> db.comments.find().count()
+4
+
+
+#sort in ascending order
+db.comments.find().sort({age:1}).pretty() 
+
+> db.comments.findOne({name: 'birender'})
+{
+        "_id" : ObjectId("61078b29ed955bef43c9137b"),
+        "name" : "birender",
+        "lang" : "python",
+        "age" : 5
+}
+
+#Update row:
+db.comments.update({name:'birender'}, 
+{
+'name': 'birender',
+'lang':'python',
+'age': 51
+})
+
+>WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+
+#View after update
+> db.comments.find().pretty()
+{
+        "_id" : ObjectId("61078b29ed955bef43c9137b"),
+        "name" : "birender",
+        "lang" : "python",
+        "age" : 51
+}
+{
+        "_id" : ObjectId("61078c01ed955bef43c9137c"),
+        "name" : "narrender",
+        "lang" : "java",
+        "age" : 6
+}
+{
+        "_id" : ObjectId("61078c01ed955bef43c9137d"),
+        "name" : "surrender",
+        "lang" : "python",
+        "age" : 2
+}
+{
+        "_id" : ObjectId("61078cd4ed955bef43c9137e"),
+        "name" : "birender",
+        "lang" : "python",
+        "age" : 5,
+        "date" : ISODate("2021-08-02T06:12:36.120Z")
+}
+>
+
+
+#Update row if not present:
+
+db.comments.update({name:'birender'}, 
+{
+'name': 'birender',
+'lang':'python',
+'age': 51
+}, {upsert: true})
