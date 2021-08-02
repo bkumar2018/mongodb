@@ -1,6 +1,8 @@
 MongoDB\Server\5 installed @ below location:
 	C:\Program Files\MongoDB\Server\5.0\bin
 
+Update the PATH in environment variables with above bin location:	
+
 open cmd
 
 View all databases:
@@ -178,5 +180,5 @@ db.comments.update({name:'birender'},
 {
 'name': 'birender',
 'lang':'python',
-'age': 51
+'age': 00
 }, {upsert: true})
