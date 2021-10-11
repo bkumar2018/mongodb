@@ -1,0 +1,169 @@
+cmd
+
+1. start mongod server
+mongod
+
+2. start mongo client
+mongo
+
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+>
+
+> db
+test    ---> current database logged in
+
+> show collections
+---> all the collections in test db
+> show collections
+coll1
+collection2
+
+
+
+>db.createCollection('employee')
+
+
+JSON:  BSON
+
+{
+'id': 123,
+'name': 'Birender',
+'age': 33
+}
+
+# This is used to insert data into collections
+>db.employee.insert({'id':1,'name':'Suraj','age':23})
+
+
+> db.employee.find()
+
+
+[{'id':3,'name3':'Prajwal1','age':21},{'id':4,'name4':'Prajwal2','age':24},{'id':5,'name5':'Prajwal3','age':23}]
+
+> db.employee.insertMany([{'id':3,'name3':'Prajwal1','age':21}, {'id':4,'name4':'Prajwal2','age':24}, {'id':5,'name5':'Prajwal3','age':23}])
+
+> db.employee.find().pretty()
+
+> db.employee.find().count()
+
+> db.employee.find({'name':'Suraj'})
+
+>  db.employee.find({'name':'Suraj'})
+{ "_id" : ObjectId("61191894df7951d7e018892a"), "id" : 1, "name" : "Suraj", "age" : 23 }
+>
+>
+>
+> db.employee.find({'name':'Suraj'}).pretty()
+{
+        "_id" : ObjectId("61191894df7951d7e018892a"),
+        "id" : 1,
+        "name" : "Suraj",
+        "age" : 23
+}
+
+
+> db.employee.update({name:'Suraj'}, {'id':11,'name':'Suraj', 'age':51, 'course': 'python'})
+
+
+
+/////////////////////
+
+CRUD Operations in mongo db:
+
+
+1. C - Create 
+Create or insert operations add new documents to a collection. If the collection does not currently exist, insert operations will create the collection.
+----------------------
+db.createCollection('employee')
+
+db.collection.insertOne() New in version 3.2
+db.collection.insertMany() New in version 3.2
+
+db.members.insertMany([
+    { "_id" : 1, "member" : "abc123", "status" : "A", "points" : 2, "misc1" : "note to self: confirm status", "misc2" : "Need to activate", "lastUpdate" : ISODate("2019-01-01T00:00:00Z") },
+    { "_id" : 2, "member" : "xyz123", "status" : "A", "points" : 60, comments: [ "reminder: ping me at 100pts", "Some random comment" ], "lastUpdate" : ISODate("2019-01-01T00:00:00Z") }
+])
+
+
+db.students3.insert([
+   { "_id" : 1, "tests" : [ 95, 92, 90 ], "average" : 92, "grade" : "A", "lastUpdate" : ISODate("2020-01-23T05:18:40.013Z") },
+   { "_id" : 2, "tests" : [ 94, 88, 90 ], "average" : 91, "grade" : "A", "lastUpdate" : ISODate("2020-01-23T05:18:40.013Z") },
+   { "_id" : 3, "tests" : [ 70, 75, 82 ], "lastUpdate" : ISODate("2019-01-01T00:00:00Z") }
+]);
+
+
+
+2. R   - Read
+Read Operations
+----------------------
+Read operations retrieve documents from a collection; i.e. query a collection for documents. MongoDB provides the following methods to read documents from a collection:
+
+db.collection.find()
+db.employee.find().pretty()
+
+3. U - Update
+Update Operations
+----------------------
+Update operations modify existing documents in a collection. 
+
+MongoDB provides the following methods to update documents of a collection:
+
+db.collection.updateOne() New in version 3.2
+db.collection.updateMany() New in version 3.2
+db.collection.replaceOne() New in version 3.2
+
+db.members.updateOne(
+   { _id: 1 },
+   [
+      { $set: { status: "Modified", comments: [ "$misc1", "$misc2" ], lastUpdate: "$$NOW" } },
+      { $unset: [ "misc1", "misc2" ] }
+   ]
+)
+
+
+db.students3.updateOne(
+   { _id: 3 },
+   [
+     { $set: { average: { $trunc: [  { $avg: "$tests" }, 0 ] }, lastUpdate: "$$NOW" } },
+     { $set: { grade: { $switch: {
+                           branches: [
+                               { case: { $gte: [ "$average", 90 ] }, then: "A" },
+                               { case: { $gte: [ "$average", 80 ] }, then: "B" },
+                               { case: { $gte: [ "$average", 70 ] }, then: "C" },
+                               { case: { $gte: [ "$average", 60 ] }, then: "D" }
+                           ],
+                           default: "F"
+     } } } }
+   ]
+)
+
+
+4. D  - Delete
+Delete Operations:
+--------------------
+Delete operations remove documents from a collection. 
+
+MongoDB provides the following methods to delete documents of a collection:
+
+db.collection.deleteOne() New in version 3.2
+db.collection.deleteMany() New in version 3.2
+
+db.members.deleteOne(
+   { "points": { $lte: 20 }, "status": "P" },
+   { hint: { status: 1 } }
+)
+
+db.members.deleteMany(
+   { "points": { $lte: 20 }, "status": "P" },
+   { hint: { status: 1 } }
+)
+
+
+
+db.members.insertOne({ "_id" : 3, "member" : "lmn123", "status" : "P", "points" :  0,  "misc1" : null, "misc2" : null })
+
+
+db.members.find()
